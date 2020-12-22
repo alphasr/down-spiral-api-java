@@ -13,13 +13,13 @@ public class DownSpiral {
             payloadLogs = payload;
         }
 
-    public static void initializeGraph(Types type, String sessionId){
-        Graph payload = new Graph(type, sessionId);
+    public static void initializeGraph(Types type, String sessionId,String label){
+        Graph payload = new Graph(type, sessionId,label);
         payloadGraph = payload;
     }
 
-    public static void downSpiralGraphs(String label, String labels,String data){
-            payloadGraph.addGraph(label,labels,data);
+    public static void downSpiralGraphs( String labels,String data){
+            payloadGraph.addGraph(labels,data);
     }
 
     public static void downSpiralLogs(String data) throws InterruptedException {

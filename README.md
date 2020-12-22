@@ -15,13 +15,13 @@
  
   Input: (String commaSeparatedHeader,String sessionId) 
   
-  Initializes table header and session id should be unique
+  Initializes table header and session id (should be unique).
 
 - `downSpiralLogs("ids,28,app,something,high");`
    
    Input: (String commaSeparatedLogs) 
   
-   Initializes table row data
+   Initializes table row data.
 
 
 - `visualizeLogs();`   
@@ -33,9 +33,9 @@
 #### Graphs visualization
   
   
-  - `initializeGraph(Types.bar,"1");`
+  - `initializeGraph(Types.bar,"1","Growth-over-years");`
    
-    Input: (enum Types,String sessionId) 
+    Input: (enum Types,String sessionId, String graphHeader) 
     
     `enum Types {
          bar,
@@ -47,13 +47,13 @@
          scatter
      }`
     
-    Initializes graph types and session id should be unique
+    Initializes graph types,the label for it, and session id (should be unique).
   
-  - `downSpiralGraphs("Growth-over-years","2015-02,2015-03,2015-04","50,45,55");`
+  - `downSpiralGraphs("2015-02,2015-03,2015-04","50,45,55");`
      
-     Input: (String graphHeader,String commaSeparatedDataLabels,commaSeparatedData) 
+     Input: (String commaSeparatedDataLabels,commaSeparatedData) 
     
-     Initializes table row data
+     Initializes graph data with its labels.
   
   
   - `visualizeGraphs();`   

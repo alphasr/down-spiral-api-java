@@ -23,21 +23,18 @@ public class Graph {
     private JsonObject datasets = new JsonObject();
 
 
-    Graph(Types type, String sessionID){
+    Graph(Types type, String sessionID, String label){
         this.type =  type;
         this.sessionId = sessionID;
+        datasets.addProperty("label",label);
+
     }
 
-    void addGraph(String label, String labels,String data){
+    void addGraph(String labels,String data){
         String[] tempLabels = labels.split(",");
         this.labels = tempLabels;
-
-        datasets.addProperty("label",label);
         JsonArray datasetData = alter(data,tempLabels);
-
         datasets.add("data", datasetData);
-
-
     }
 
     JsonArray alter(String data, String[] labels){
@@ -46,21 +43,8 @@ public class Graph {
         for(int i = 0; i < labels.length; i++){
             datasetData.add(tempData[i]);
         }
-
         return datasetData;
-
     }
-
-//    {
-//        labels: ["some", "new"],
-//        datasets: {
-//            data: ["33", "32"],
-//            label: "some"
-//        }
-//    }
-
-
-
 
     void flushLabels(){
         //flush labels
