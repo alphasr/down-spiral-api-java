@@ -31,4 +31,21 @@ public class Graph {
     void setType (String type){
         this.type=  type;
     }
+    void setLabels (String labels[]){
+        this.labels=  labels;
+    }
+    void setSessionId (String sessionId){
+        this.sessionId=  sessionId;
+    }
+
+    void flushDatasets(){
+        //flush data
+        datasets.data.clear();
+
+    }
+    void flushLabels(){
+        //flush labels
+        this.labels = new String[0];
+
+    }
 }

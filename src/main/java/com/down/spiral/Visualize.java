@@ -47,6 +47,7 @@ class Visualize {
 
         if(flush){
             payload.flushHeader();
+            payload.flushData();
         }
     }
 
@@ -68,21 +69,29 @@ class Visualize {
             ex.printStackTrace();
         }
 
+         if(flush){
+            payload.flushDatasets();
+            payload.flushLabels();
+         }
+
     }
 
 
      void sendData (String tableData) throws  InterruptedException {
          socket.emit("tableData", tableData);
          socket.connect();
-         Thread.sleep(2000);
+         while(!socket.connected()){
+             Thread.sleep(1000);
+         }
          socket.disconnect();
     }
 
      void sendGraph (String graphData) throws  InterruptedException {
          socket.emit("graphData", graphData);
          socket.connect();
-         Thread.sleep(2000);
-
+         while(!socket.connected()){
+             Thread.sleep(1000);
+         }
          socket.disconnect();
      }
 

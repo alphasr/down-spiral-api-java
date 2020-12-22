@@ -4,7 +4,7 @@ import java.util.Vector;
 class ITableLog{
      String[] header;
     private String sessionId;
-     Vector <ITableData> data = new Vector<>();
+     Vector <String[]> data = new Vector<>();
 
     ITableLog(String[] header,String sessionId){
         this.header = header;
@@ -12,10 +12,8 @@ class ITableLog{
     }
 
 
-    boolean addLogs(String hostName, String appName, String priority){
-
-        ITableData object = new ITableData(hostName,appName,priority);
-        data.addElement(object);
+    boolean addLogs(String data[]){
+        this.data.addElement(data);
         return true;
 
     }
