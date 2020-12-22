@@ -1,7 +1,12 @@
+package com.down.spiral;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Vector;
+
+
 
 public class Graph {
     @SerializedName("labels")
@@ -10,39 +15,53 @@ public class Graph {
     @SerializedName("sessionId")
     @Expose
     private String sessionId;
-    @SerializedName("datasets")
-    @Expose
-    GraphData datasets;
     @SerializedName("type")
     @Expose
-    private String type;
+    private Types type;
+    @SerializedName("datasets")
+    @Expose
+    private JsonObject datasets = new JsonObject();
 
 
-    Graph(String[] headers, String sessionID,String type){
+    Graph(Types type, String sessionID){
         this.type =  type;
-        this.labels = headers;
         this.sessionId = sessionID;
     }
 
-   void setData(String label,Vector<Integer> data){
-       this.datasets = new GraphData(label,data);
-    }
+    void addGraph(String label, String labels,String data){
+        String[] tempLabels = labels.split(",");
+        this.labels = tempLabels;
 
-    void setType (String type){
-        this.type=  type;
-    }
-    void setLabels (String labels[]){
-        this.labels=  labels;
-    }
-    void setSessionId (String sessionId){
-        this.sessionId=  sessionId;
-    }
+        datasets.addProperty("label",label);
+        JsonArray datasetData = alter(data,tempLabels);
 
-    void flushDatasets(){
-        //flush data
-        datasets.data.clear();
+        datasets.add("data", datasetData);
+
 
     }
+
+    JsonArray alter(String data, String[] labels){
+        String [] tempData = data.split(",");
+        JsonArray datasetData = new JsonArray();
+        for(int i = 0; i < labels.length; i++){
+            datasetData.add(tempData[i]);
+        }
+
+        return datasetData;
+
+    }
+
+//    {
+//        labels: ["some", "new"],
+//        datasets: {
+//            data: ["33", "32"],
+//            label: "some"
+//        }
+//    }
+
+
+
+
     void flushLabels(){
         //flush labels
         this.labels = new String[0];

@@ -1,3 +1,5 @@
+package com.down.spiral;
+
 import com.google.gson.Gson;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -70,7 +72,7 @@ class Visualize {
         }
 
          if(flush){
-            payload.flushDatasets();
+//            payload.flushDatasets();
             payload.flushLabels();
          }
 
