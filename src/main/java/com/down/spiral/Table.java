@@ -47,12 +47,10 @@ class ITableLog{
     }
 
     void flushData(){
-        //flush data
         data.clear();
     }
 
     void flushHeader(){
-        //flush header string
         header = new String[0];
     }
 
