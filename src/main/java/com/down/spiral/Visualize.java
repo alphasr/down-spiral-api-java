@@ -1,124 +1,63 @@
 package com.down.spiral;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import org.apache.log4j.Logger;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 class Visualize {
 
     private Socket socket;
-    public final static String SOCKET_PORT = "8000";
     public final static String logDataFile = "src/logger.json";
     public final static String graphDataFile = "src/graph.json";
-    public final static String hostName = "http://localhost:";
+    private static final Logger logger = Logger.getLogger(DownSpiral.class);
 
-    public Visualize() {
-        try {
-            this.socket = IO.socket(hostName+SOCKET_PORT);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+    public void initialize(String host, int port) {
+       if(this.socket == null || !this.socket.connected()){
+           try {
+               this.socket = IO.socket("http://localhost:8000");
+           } catch (URISyntaxException e) {
+               logger.error(e);
+           }
+       }
+
+    }
+    public void close() throws InterruptedException{
+
+        while(this.socket.connected()){
+            this.socket.disconnect();
+            Thread.sleep(1000);
         }
 
     }
 
-    void setLogs(ITableLog payload, boolean flush) {
 
-        try {
-            // create Gson instance
-            Gson gson = new Gson();
-            // create a writer
-            Writer writer = Files.newBufferedWriter(Paths.get(logDataFile));
-            // convert logs object to JSON file
-            gson.toJson(payload, writer);
-            //flush data
-            payload.flushData();
-            writer.close();
-        }
 
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
-        if(flush){
-            payload.flushHeader();
-            payload.flushData();
+    void sendLogs(JsonObject logs, LOGGERTYPE loggerType) throws InterruptedException {
+        
+        while(!this.socket.connected()){
+            this.socket.connect();
+            Thread.sleep(1000);
         }
+        this.socket.emit((loggerType).toString(), logs);
+
+
     }
 
-     void setGraph(Graph payload, boolean flush) {
+    void sendLogs(String rowData, LOGGERTYPE loggerType) throws InterruptedException {
 
-        try {
-            // create Gson instance
-            Gson gson = new Gson();
-            // create a writer
-            Writer writer = Files.newBufferedWriter(Paths.get(graphDataFile));
-            // convert logs object to JSON file
-            gson.toJson(payload, writer);
-            //flush data
-//            payload.flushData();
-            writer.close();
+        while(!this.socket.connected()){
+            this.socket.connect();
+            Thread.sleep(1000);
         }
+        this.socket.emit((loggerType).toString(), rowData);
 
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-         if(flush){
-//            payload.flushDatasets();
-            payload.flushLabels();
-         }
 
     }
 
 
-     void sendData (String tableData) throws  InterruptedException {
-         socket.emit("tableData", tableData);
-         socket.connect();
-         while(!socket.connected()){
-             Thread.sleep(1000);
-         }
-         socket.disconnect();
-    }
-
-     void sendGraph (String graphData) throws  InterruptedException {
-         socket.emit("graphData", graphData);
-         socket.connect();
-         while(!socket.connected()){
-             Thread.sleep(1000);
-         }
-         socket.disconnect();
-     }
-
-     String getTableData(){
-        Gson gson = new Gson();
-        try(Reader reader = new FileReader(logDataFile)){
-            ITableLog finalData = gson.fromJson(reader, ITableLog.class);
-            return gson.toJson(finalData);
-        }
-        catch (IOException exception){
-            exception.printStackTrace();
-        }
-        return null;
-
-    }
-     String getGraphData(){
-        Gson gson = new Gson();
-        try(Reader reader = new FileReader(graphDataFile)){
-            Graph finalData = gson.fromJson(reader, Graph.class);
-            return gson.toJson(finalData);
-        }
-        catch (IOException exception){
-            exception.printStackTrace();
-        }
-        return null;
-    }
 
 }

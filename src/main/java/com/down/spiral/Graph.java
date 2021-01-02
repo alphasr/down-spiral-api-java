@@ -1,54 +1,25 @@
 package com.down.spiral;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-
-
-
-public class Graph {
-    @SerializedName("labels")
-    @Expose
-    private String labels[];
-    @SerializedName("sessionId")
-    @Expose
-    private String sessionId;
-    @SerializedName("type")
-    @Expose
-    private Types type;
-    @SerializedName("datasets")
-    @Expose
-    private JsonObject datasets = new JsonObject();
-
-
-    Graph(Types type, String sessionID, String label){
-        this.type =  type;
-        this.sessionId = sessionID;
-        datasets.addProperty("label",label);
-
+class Graph extends Base{
+    private String graphType;
+    private String x_axis;
+    private String y_axis;
+    public Graph(String sessionId, LOGGERTYPE loggerType,String graphType,String x_axis,String y_axis) {
+        super(sessionId, loggerType);
+        this.graphType = graphType;
+        this.x_axis = x_axis;
+        this.y_axis = y_axis;
     }
 
-    void addGraph(String labels,String data){
-        String[] tempLabels = labels.split(",");
-        this.labels = tempLabels;
-        JsonArray datasetData = alter(data,tempLabels);
-        datasets.add("data", datasetData);
+    public String getX_axis() {
+        return x_axis;
     }
 
-    JsonArray alter(String data, String[] labels){
-        String [] tempData = data.split(",");
-        JsonArray datasetData = new JsonArray();
-        for(int i = 0; i < labels.length; i++){
-            datasetData.add(tempData[i]);
-        }
-        return datasetData;
+    public String getY_axis() {
+        return y_axis;
     }
 
-    void flushLabels(){
-        //flush labels
-        this.labels = new String[0];
-
+    public String getGraphType() {
+        return graphType;
     }
 }
